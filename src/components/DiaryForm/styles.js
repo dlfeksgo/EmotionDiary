@@ -1,9 +1,4 @@
 import styled from 'styled-components';
-import emotion1 from '../../assets/emotion1.png';
-import emotion2 from '../../assets/emotion2.png';
-import emotion3 from '../../assets/emotion3.png';
-import emotion4 from '../../assets/emotion4.png';
-import emotion5 from '../../assets/emotion5.png';
 
 export const EmotionDiv = styled.div`
 	display: flex;
@@ -17,7 +12,16 @@ export const EmotionButton = styled.button`
 	font-size: 8px;
 	border: none;
 	border-radius: 4px;
-	background: #eeeeee;
+	/* background: #eeeeee; */
+	background: ${({ status }) => {
+		switch (status) {
+			case true:
+				return `rgba(252,252,252,0.5)`;
+
+			default:
+				return `#eeeeee`;
+		}
+	}};
 	cursor: pointer;
 	padding: 0;
 	&:hover {
@@ -34,7 +38,7 @@ export const EmotionButton = styled.button`
 				case 5:
 					return `background: #FD565F`;
 				default:
-					return `background: #FD565F`;
+					return `background: #eeeeee`;
 			}
 		}}
 	}

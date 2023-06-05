@@ -1,6 +1,8 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
+import DiaryItem from '../DiaryItem';
 
 const SortingDiv = styled.div`
 	display: flex;
@@ -28,6 +30,10 @@ const SortingButton = styled.button`
 
 const DiaryList = () => {
 	const navigate = useNavigate();
+	const { diaryPosts } = useSelector((state) => state.diary);
+
+	console.log(diaryPosts);
+
 	return (
 		<>
 			<SortingDiv>
@@ -48,6 +54,11 @@ const DiaryList = () => {
 					일기 쓰기
 				</SortingButton>
 			</SortingDiv>
+			<div>
+				{diaryPosts.map((v) => {
+					return <DiaryItem key={v.id} {...v} />;
+				})}
+			</div>
 		</>
 	);
 };

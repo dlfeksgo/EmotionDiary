@@ -1,12 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = [];
+const initialState = {
+	diaryPosts: [],
+};
 
 const diarySlice = createSlice({
 	name: 'diary',
 	initialState,
 	reducers: {
-		create: (state, action) => {},
+		create: (state, action) => {
+			state.diaryPosts.unshift(action.payload);
+		},
 	},
 });
 
