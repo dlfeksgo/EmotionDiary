@@ -6,10 +6,11 @@ import {
 	DiaryTextArea,
 	ButtonDiv,
 } from './styles';
-import { Button } from '../Button';
+import MyButton from '../MyButton';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import diarySlice from '../../reducers/diarySlice';
+import MyHeader from '../MyHeader';
 
 const DiaryForm = () => {
 	const navigate = useNavigate();
@@ -35,6 +36,7 @@ const DiaryForm = () => {
 
 	return (
 		<div>
+			<MyHeader headText={'새로운 일기 쓰기'} leftChild={'돌아가기'} />
 			<div>
 				<h5>오늘의 감정</h5>
 				<EmotionDiv>
@@ -66,17 +68,17 @@ const DiaryForm = () => {
 				</div>
 			</div>
 			<ButtonDiv>
-				<Button
+				<MyButton
 					status={'default'}
 					onClick={() => {
 						navigate(-1);
 					}}
 				>
 					취소하기
-				</Button>
-				<Button status={'positive'} onClick={handleCreate}>
+				</MyButton>
+				<MyButton status={'positive'} onClick={handleCreate}>
 					등록하기
-				</Button>
+				</MyButton>
 			</ButtonDiv>
 		</div>
 	);

@@ -1,7 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button } from './Button';
-import { useNavigate } from 'react-router';
 
 const Header = styled.header`
 	padding-top: 20px;
@@ -12,24 +10,29 @@ const Header = styled.header`
 `;
 
 const HeadText = styled.div`
-	width: 70%;
-	text-align: center;
+	display: flex;
+	width: 60%;
+	justify-content: center;
 `;
 
-const LeftButton = styled(Button)`
-	width: 15%;
+const LeftButton = styled.div`
+	display: flex;
+	width: 20%;
+	justify-content: start;
 `;
 
-const RightButton = styled(Button)`
-	width: 15%;
+const RightButton = styled.div`
+	display: flex;
+	width: 20%;
+	justify-content: end;
 `;
 
 const MyHeader = ({ headText, leftChild, rightChild }) => {
 	return (
 		<Header>
-			<LeftButton status={'default'}>{leftChild}</LeftButton>
+			<LeftButton>{leftChild}</LeftButton>
 			<HeadText>{headText}</HeadText>
-			<RightButton status={'default'}>{rightChild}</RightButton>
+			<RightButton>{rightChild}</RightButton>
 		</Header>
 	);
 };

@@ -1,61 +1,77 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
-import styled from 'styled-components';
 import DiaryItem from '../DiaryItem';
 
-const SortingDiv = styled.div`
-	display: flex;
-	justify-content: space-between;
-	margin-top: 10px;
-`;
+const sortOptionList = [
+	{
+		value: 'latest',
+		name: '최근순',
+	},
+	{
+		value: 'oldest',
+		name: '오래된 순',
+	},
+];
 
-const SortingSelect = styled.select`
-	border-style: none;
-	border-radius: 5px;
-	background: #eeeeee;
-	padding: 4px;
-	margin-right: 8px;
-`;
+const filterOptionList = [
+	{
+		value: 'all',
+		name: '전체',
+	},
+	{
+		value: 'good',
+		name: '좋은 감정만',
+	},
+	{
+		value: 'bad',
+		name: '나쁜 감정만',
+	},
+];
 
-const SortingButton = styled.button`
-	width: 100%;
-	background: #24be62;
-	border-style: none;
-	padding: 4px;
-	border-radius: 5px;
-	color: white;
-	cursor: pointer;
-`;
+const ControlMenu = ({ value, onChange, optionList }) => {
+	return (
+		<select value={value} onChange={(e) => onChange(e.target.value)}>
+			{optionList.map((v) => {
+				return (
+					<option key={v.value} value={v.value}>
+						{v.name}
+					</option>
+				);
+			})}
+		</select>
+	);
+};
 
 const DiaryList = () => {
-	const navigate = useNavigate();
 	const { diaryPosts } = useSelector((state) => state.diary);
+	const [sortDateType, setSortDateType] = useState('latest');
+	const [filterEmotion, setFilterEmotion] = useState('all');
 
-	console.log(diaryPosts);
+	const getProcessedDiaryList = () => {
+		const compare = (a, b) => {
+			if (sortDateType === 'latest') {
+				return parseInt(b.date) - parseInt(a.date);
+			} else return parseInt(a.date) - parseInt(b.date);
+		};
+		const copyList = JSON.parse(JSON.stringify(diaryPosts));
+		const sortedList = copyList.sort(compare);
+		return sortedList;
+	};
 
 	return (
 		<>
-			<SortingDiv>
-				<SortingSelect name="latest">
-					<option value={1}>최신순</option>
-					<option value={-1}>오래된순</option>
-				</SortingSelect>
-				<SortingSelect name="emotion">
-					<option value={0}>전부다</option>
-					<option value={1}>좋은 감정만</option>
-					<option value={-1}>나쁜 감정만</option>
-				</SortingSelect>
-				<SortingButton
-					onClick={() => {
-						navigate('/create');
-					}}
-				>
-					일기 쓰기
-				</SortingButton>
-			</SortingDiv>
+			<ControlMenu
+				value={sortDateType}
+				onChange={setSortDateType}
+				optionList={sortOptionList}
+			/>
+			<ControlMenu
+				value={filterEmotion}
+				onChange={setFilterEmotion}
+				optionList={filterOptionList}
+			/>
 			<div>
-				{diaryPosts.map((v) => {
+				{getProcessedDiaryList().map((v) => {
 					return <DiaryItem key={v.id} {...v} />;
 				})}
 			</div>

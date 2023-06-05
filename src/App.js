@@ -19,14 +19,9 @@ function App() {
 		<Provider store={store}>
 			<BrowserRouter>
 				<div className="App">
-					<MyHeader
-						headText={'감정 일기'}
-						leftChild={'이전'}
-						rightChild={'다음'}
-					/>
 					<Routes>
-						<Route path="/" element={<Home params={'home'} />} />
-						<Route path="/diary" element={<Diary params={'diary'} />} />
+						<Route path="/" element={<Home />} />
+						<Route path="/diary" element={<Diary />} />
 						<Route path="/create" element={<Create />} />
 						<Route path="/edit" element={<Edit />} />
 					</Routes>

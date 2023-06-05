@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-export const Button = styled.button`
+const Button = styled.button`
 	height: 30px;
 	border-style: none;
-	border-radius: 8px;
+	border-radius: 4px;
 	font-size: 12px;
 	background: ${({ status }) => {
 		switch (status) {
@@ -22,3 +22,13 @@ export const Button = styled.button`
 	}};
 	cursor: pointer;
 `;
+
+const MyButton = ({ status, text, onClick }) => {
+	return (
+		<Button status={status} onClick={onClick}>
+			{text}
+		</Button>
+	);
+};
+
+export default MyButton;
