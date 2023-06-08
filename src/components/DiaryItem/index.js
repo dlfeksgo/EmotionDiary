@@ -1,12 +1,21 @@
 import React from 'react';
-import { ImgDiv, ItemDiv, ItemImg, ItemP } from './styles';
+import { ContentDiv, ContentWrapper, ImgDiv, ItemDiv, ItemImg } from './styles';
+import MyButton from '../MyButton';
 
-const DiaryItem = ({ emotionGrade, content }) => {
+const DiaryItem = ({ emotion, content }) => {
 	return (
 		<>
 			<ItemDiv>
-				<ImgDiv emotionGrade={emotionGrade}></ImgDiv>
-				<ItemP>내용 : {content}</ItemP>
+				<ImgDiv emotionGrade={emotion}>
+					<ItemImg src={require(`../../assets/emotion${emotion}.png`)} alt="" />
+				</ImgDiv>
+				<ContentWrapper>
+					<div>날짜</div>
+					<ContentDiv>{content}</ContentDiv>
+				</ContentWrapper>
+				<div>
+					<MyButton status={'default'} text={'수정하기'} />
+				</div>
 			</ItemDiv>
 		</>
 	);

@@ -73,12 +73,13 @@ const DiaryForm = () => {
 					onClick={() => {
 						navigate(-1);
 					}}
-				>
-					취소하기
-				</MyButton>
-				<MyButton status={'positive'} onClick={handleCreate}>
-					등록하기
-				</MyButton>
+					text={'취소하기'}
+				></MyButton>
+				<MyButton
+					status={'positive'}
+					onClick={handleCreate}
+					text={'등록하기'}
+				></MyButton>
 			</ButtonDiv>
 		</div>
 	);

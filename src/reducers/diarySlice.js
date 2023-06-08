@@ -32,6 +32,12 @@ const initialState = {
 			content: '5번 다이어리',
 			date: 1685969864967,
 		},
+		{
+			id: 6,
+			emotion: 2,
+			content: '6번 다이어리',
+			date: 1785969864967,
+		},
 	],
 };
 

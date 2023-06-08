@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import DiaryItem from '../DiaryItem';
+import MyButton from '../MyButton';
+import { useNavigate } from 'react-router';
+import { HeaderWrapper, ListDiv, Select } from './styles';
 
 const sortOptionList = [
 	{
@@ -30,7 +33,7 @@ const filterOptionList = [
 
 const ControlMenu = ({ value, onChange, optionList }) => {
 	return (
-		<select value={value} onChange={(e) => onChange(e.target.value)}>
+		<Select value={value} onChange={(e) => onChange(e.target.value)}>
 			{optionList.map((v) => {
 				return (
 					<option key={v.value} value={v.value}>
@@ -38,12 +41,13 @@ const ControlMenu = ({ value, onChange, optionList }) => {
 					</option>
 				);
 			})}
-		</select>
+		</Select>
 	);
 };
 
-const DiaryList = () => {
-	const { diaryPosts } = useSelector((state) => state.diary);
+const DiaryList = ({ data }) => {
+	const navigate = useNavigate();
+	// const { diaryPosts } = useSelector((state) => state.diary);
 	const [sortDateType, setSortDateType] = useState('latest');
 	const [filterEmotion, setFilterEmotion] = useState('all');
 
@@ -53,28 +57,38 @@ const DiaryList = () => {
 				return parseInt(b.date) - parseInt(a.date);
 			} else return parseInt(a.date) - parseInt(b.date);
 		};
-		const copyList = JSON.parse(JSON.stringify(diaryPosts));
+		const copyList = JSON.parse(JSON.stringify(data));
 		const sortedList = copyList.sort(compare);
 		return sortedList;
 	};
 
 	return (
 		<>
-			<ControlMenu
-				value={sortDateType}
-				onChange={setSortDateType}
-				optionList={sortOptionList}
-			/>
-			<ControlMenu
-				value={filterEmotion}
-				onChange={setFilterEmotion}
-				optionList={filterOptionList}
-			/>
-			<div>
+			<HeaderWrapper>
+				<ControlMenu
+					value={sortDateType}
+					onChange={setSortDateType}
+					optionList={sortOptionList}
+				/>
+				<ControlMenu
+					value={filterEmotion}
+					onChange={setFilterEmotion}
+					optionList={filterOptionList}
+				/>
+
+				<MyButton
+					status={'positive'}
+					onClick={() => {
+						navigate('/create');
+					}}
+					text={'새 일기 쓰기'}
+				/>
+			</HeaderWrapper>
+			<ListDiv>
 				{getProcessedDiaryList().map((v) => {
 					return <DiaryItem key={v.id} {...v} />;
 				})}
-			</div>
+			</ListDiv>
 		</>
 	);
 };
