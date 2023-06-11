@@ -19,6 +19,7 @@ const LeftButton = styled.div`
 	display: flex;
 	width: 20%;
 	justify-content: start;
+	cursor: pointer;
 `;
 
 const RightButton = styled.div`
@@ -27,10 +28,10 @@ const RightButton = styled.div`
 	justify-content: end;
 `;
 
-const MyHeader = ({ headText, leftChild, rightChild }) => {
+const MyHeader = ({ headText, leftChild, rightChild, onClickLeft }) => {
 	return (
 		<Header>
-			<LeftButton>{leftChild}</LeftButton>
+			<LeftButton onClick={onClickLeft}>{leftChild}</LeftButton>
 			<HeadText>{headText}</HeadText>
 			<RightButton>{rightChild}</RightButton>
 		</Header>

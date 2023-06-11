@@ -2,7 +2,9 @@ import React from 'react';
 import { ContentDiv, ContentWrapper, ImgDiv, ItemDiv, ItemImg } from './styles';
 import MyButton from '../MyButton';
 
-const DiaryItem = ({ emotion, content }) => {
+const DiaryItem = ({ emotion, content, date }) => {
+	const strDate = new Date(parseInt(date)).toLocaleDateString();
+
 	return (
 		<>
 			<ItemDiv>
@@ -10,7 +12,7 @@ const DiaryItem = ({ emotion, content }) => {
 					<ItemImg src={require(`../../assets/emotion${emotion}.png`)} alt="" />
 				</ImgDiv>
 				<ContentWrapper>
-					<div>날짜</div>
+					<div>{strDate}</div>
 					<ContentDiv>{content}</ContentDiv>
 				</ContentWrapper>
 				<div>

@@ -30,10 +30,8 @@ import { useSelector } from 'react-redux';
 
 const Home = () => {
 	const { diaryPosts } = useSelector((state) => state.diary);
-
 	const [curDate, setCurDate] = useState(new Date()); //현재 선택된 날짜 정보
 	const [data, setData] = useState([]);
-
 	const headText = `${curDate.getFullYear()}년 ${curDate.getMonth() + 1}월`;
 
 	useEffect(() => {

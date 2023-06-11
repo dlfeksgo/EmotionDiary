@@ -47,7 +47,6 @@ const ControlMenu = ({ value, onChange, optionList }) => {
 
 const DiaryList = ({ data }) => {
 	const navigate = useNavigate();
-	// const { diaryPosts } = useSelector((state) => state.diary);
 	const [sortDateType, setSortDateType] = useState('latest');
 	const [filterEmotion, setFilterEmotion] = useState('all');
 

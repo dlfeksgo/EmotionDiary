@@ -1,62 +1,101 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
 	EmotionButton,
 	EmotionDiv,
 	EmotionImg,
 	DiaryTextArea,
 	ButtonDiv,
+	DateWrapper,
+	EmotionWrapper,
+	ContentWrapper,
+	DateInput,
 } from './styles';
 import MyButton from '../MyButton';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import diarySlice from '../../reducers/diarySlice';
 import MyHeader from '../MyHeader';
+import emotionSlice from '../../reducers/emotionSlice';
+import EmotionList from '../EmotionList';
+
+const getStringDate = (date) => {
+	return date.toISOString().slice(0, 10);
+};
 
 const DiaryForm = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const { emotion } = useSelector((state) => state.emotion);
+	const { emotionList } = useSelector((state) => state.emotion);
 	const [content, setContent] = useState('');
-	const [emotionGrade, setEmotionGrade] = useState('');
 
-	const handleEmotion = (e) => () => {
-		setEmotionGrade(e);
-	};
+	const [date, setDate] = useState(getStringDate(new Date()));
+	const [emotion, setEmotion] = useState(1);
 
-	const handleContent = (e) => {
+	const dataId = useRef(0);
+	// useEffect(() => {
+	// 	dispatch(emotionSlice.actions.statusUpdate({ emotionGrade }));
+	// }, [emotionGrade]);
+
+	const handleEmotion = useCallback(
+		(grade) => () => {
+			setEmotion(grade);
+		},
+		[]
+	);
+
+	const handleContent = useCallback((e) => {
 		setContent(e.target.value);
-	};
+	}, []);
 
 	const handleCreate = () => {
-		dispatch(diarySlice.actions.create({ emotionGrade, content }));
-		setEmotionGrade('');
+		dispatch(
+			diarySlice.actions.create({
+				id: dataId.current,
+				emotion,
+				content,
+				date: new Date().getTime(),
+			})
+		);
+		setEmotion('');
 		setContent('');
-		navigate('/');
+		navigate('/', { replace: true });
 	};
 
 	return (
 		<div>
-			<MyHeader headText={'새로운 일기 쓰기'} leftChild={'돌아가기'} />
-			<div>
+			<MyHeader
+				headText={'새로운 일기 쓰기'}
+				leftChild={'돌아가기'}
+				onClickLeft={() => {
+					navigate(-1);
+				}}
+			/>
+			<DateWrapper>
+				<h5>날짜</h5>
+				<DateInput
+					type="date"
+					value={date}
+					onChange={(e) => {
+						setDate(e.target.value);
+					}}
+				/>
+			</DateWrapper>
+			<EmotionWrapper>
 				<h5>오늘의 감정</h5>
 				<EmotionDiv>
-					{emotion.map((v, i) => {
+					{emotionList.map((v) => {
 						return (
-							<EmotionButton
-								key={v.name}
-								value={v.grade}
-								onClick={handleEmotion(v.grade)}
-								status={v.status}
-							>
-								<EmotionImg src={v.img} />
-
-								<p style={{ margin: 0 }}>{v.name}</p>
-							</EmotionButton>
+							<EmotionList
+								key={v.grade}
+								{...v}
+								onClick={handleEmotion}
+								isSelected={v.grade === emotion}
+							/>
 						);
 					})}
 				</EmotionDiv>
-			</div>
-			<div>
+			</EmotionWrapper>
+			<ContentWrapper>
 				<h5>오늘의 일기</h5>
 				<div>
 					<DiaryTextArea
@@ -66,7 +105,7 @@ const DiaryForm = () => {
 						onChange={handleContent}
 					></DiaryTextArea>
 				</div>
-			</div>
+			</ContentWrapper>
 			<ButtonDiv>
 				<MyButton
 					status={'default'}
@@ -86,3 +125,8 @@ const DiaryForm = () => {
 };
 
 export default DiaryForm;
+{
+	/* {emotion.map((v, i) => {
+						return <EmotionList key={v.grade} {...v} onClick={handleEmotion} />;
+					})} */
+}

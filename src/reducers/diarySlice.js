@@ -46,6 +46,7 @@ const diarySlice = createSlice({
 	initialState,
 	reducers: {
 		create: (state, action) => {
+			console.log(action.payload);
 			state.diaryPosts.unshift(action.payload);
 		},
 	},
