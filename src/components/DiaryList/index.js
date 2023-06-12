@@ -51,13 +51,26 @@ const DiaryList = ({ data }) => {
 	const [filterEmotion, setFilterEmotion] = useState('all');
 
 	const getProcessedDiaryList = () => {
+		const filterCallback = (item) => {
+			if (filterEmotion === 'good') {
+				return parseInt(item.emotion) <= 3;
+			} else {
+				return parseInt(item.emotion) > 3;
+			}
+		};
+
 		const compare = (a, b) => {
 			if (sortDateType === 'latest') {
 				return parseInt(b.date) - parseInt(a.date);
 			} else return parseInt(a.date) - parseInt(b.date);
 		};
 		const copyList = JSON.parse(JSON.stringify(data));
-		const sortedList = copyList.sort(compare);
+		const filteredList =
+			filterEmotion === 'all'
+				? copyList
+				: copyList.filter((v) => filterCallback(v));
+		const sortedList = filteredList.sort(compare);
+
 		return sortedList;
 	};
 

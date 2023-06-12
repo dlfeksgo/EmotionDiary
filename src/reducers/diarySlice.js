@@ -49,7 +49,19 @@ const diarySlice = createSlice({
 			console.log(action.payload);
 			state.diaryPosts.unshift(action.payload);
 		},
+		edit: (state, action) => {
+			console.log(action.payload);
+
+			const data = state.diaryPosts.find(
+				(v) => v.id === parseInt(action.payload.id)
+			);
+			data.content = action.payload.editContent;
+			data.emotion = parseInt(action.payload.editEmotion);
+			data.date = action.payload.editDate;
+		},
 	},
 });
+
+export const { edit } = diarySlice.actions;
 
 export default diarySlice;

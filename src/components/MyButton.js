@@ -23,9 +23,9 @@ const Button = styled.button`
 	cursor: pointer;
 `;
 
-const MyButton = ({ status, text, onClick }) => {
+const MyButton = ({ status, text, onClick, id }) => {
 	return (
-		<Button status={status} onClick={onClick}>
+		<Button status={status} onClick={onClick} id={id}>
 			{text}
 		</Button>
 	);
