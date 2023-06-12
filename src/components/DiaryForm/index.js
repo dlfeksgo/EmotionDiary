@@ -85,7 +85,7 @@ const DiaryForm = ({ editId }) => {
 				editDate: new Date(editDate).getTime(),
 			})
 		);
-		navigate('/', { replace: true });
+		navigate(`/diary/${editId}`, { replace: true });
 	};
 
 	const handleRemove = () => {
@@ -169,7 +169,7 @@ const DiaryForm = ({ editId }) => {
 			<div>
 				<MyHeader
 					headText={'새로운 일기 쓰기'}
-					leftChild={'돌아가기'}
+					leftChild={<MyButton text={'돌아가기'} status={'default'} />}
 					onClickLeft={() => {
 						navigate(-1);
 					}}
