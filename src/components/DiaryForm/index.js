@@ -13,7 +13,7 @@ import {
 import MyButton from '../MyButton';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import diarySlice, { edit } from '../../reducers/diarySlice';
+import diarySlice, { edit, remove } from '../../reducers/diarySlice';
 import MyHeader from '../MyHeader';
 import emotionSlice from '../../reducers/emotionSlice';
 import EmotionList from '../EmotionList';
@@ -74,6 +74,9 @@ const DiaryForm = ({ editId }) => {
 	};
 
 	const handleEdit = () => {
+		if (editContent.length < 5) {
+			return alert('내용은 5자 이상 입력해주세요.');
+		}
 		dispatch(
 			edit({
 				id: data.id,
@@ -85,15 +88,29 @@ const DiaryForm = ({ editId }) => {
 		navigate('/', { replace: true });
 	};
 
+	const handleRemove = () => {
+		if (window.confirm('삭제할까요?')) {
+			dispatch(remove({ id: data.id }));
+			navigate('/');
+		}
+	};
+
 	if (editId) {
 		return (
 			<div>
 				<MyHeader
 					headText={'일기 수정하기'}
-					leftChild={'돌아가기'}
+					leftChild={<MyButton text={'돌아가기'} status={'default'} />}
 					onClickLeft={() => {
 						navigate(-1);
 					}}
+					rightChild={
+						<MyButton
+							text={'삭제하기'}
+							status={'negative'}
+							onClick={handleRemove}
+						/>
+					}
 				/>
 				<DateWrapper>
 					<h5>날짜</h5>

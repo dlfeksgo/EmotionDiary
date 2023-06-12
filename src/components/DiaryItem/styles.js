@@ -29,6 +29,7 @@ export const ImgDiv = styled.div`
 				return `#eeeeee`;
 		}
 	}};
+	cursor: pointer;
 `;
 
 export const ItemImg = styled.img`
@@ -37,6 +38,7 @@ export const ItemImg = styled.img`
 
 export const ContentWrapper = styled.div`
 	flex: 1;
+	cursor: pointer;
 `;
 
 export const ContentDiv = styled.div`

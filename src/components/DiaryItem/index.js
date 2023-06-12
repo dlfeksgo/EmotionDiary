@@ -8,13 +8,17 @@ const DiaryItem = ({ emotion, content, date, id }) => {
 	const strDate = new Date(parseInt(date)).toLocaleDateString();
 	// const strDate = new Date(parseInt(date)).toISOString().slice(0, 10);
 
+	const navigateDetail = () => {
+		navigate(`/diary/${id}`);
+	};
+
 	return (
 		<>
 			<ItemDiv>
-				<ImgDiv emotionGrade={emotion}>
+				<ImgDiv emotionGrade={emotion} onClick={navigateDetail}>
 					<ItemImg src={require(`../../assets/emotion${emotion}.png`)} alt="" />
 				</ImgDiv>
-				<ContentWrapper>
+				<ContentWrapper onClick={navigateDetail}>
 					<div>{strDate}</div>
 					<ContentDiv>{content}</ContentDiv>
 				</ContentWrapper>

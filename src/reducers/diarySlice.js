@@ -59,9 +59,15 @@ const diarySlice = createSlice({
 			data.emotion = parseInt(action.payload.editEmotion);
 			data.date = action.payload.editDate;
 		},
+		remove: (state, action) => {
+			// console.log(action.payload);
+			state.diaryPosts = state.diaryPosts.filter(
+				(v) => v.id !== parseInt(action.payload.id)
+			);
+		},
 	},
 });
 
-export const { edit } = diarySlice.actions;
+export const { edit, remove } = diarySlice.actions;
 
 export default diarySlice;

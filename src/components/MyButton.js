@@ -18,7 +18,7 @@ const Button = styled.button`
 		}
 	}};
 	color: ${({ status }) => {
-		return status === 'positive' ? 'white' : 'black';
+		return status === 'default' ? 'black' : 'white';
 	}};
 	cursor: pointer;
 `;
