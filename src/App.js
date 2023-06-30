@@ -12,7 +12,6 @@ import Create from './pages/Create';
 import Edit from './pages/Edit';
 import { Provider } from 'react-redux';
 import store from './configureStore';
-import MyHeader from './components/MyHeader';
 
 function App() {
 	return (

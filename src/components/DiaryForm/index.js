@@ -15,48 +15,47 @@ import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import diarySlice, { edit, remove } from '../../reducers/diarySlice';
 import MyHeader from '../MyHeader';
-import emotionSlice from '../../reducers/emotionSlice';
 import EmotionList from '../EmotionList';
 
 const getStringDate = (date) => {
 	return date.toISOString().slice(0, 10);
 };
 
-const DiaryForm = ({ editId }) => {
+const DiaryForm = ({ isEdit, targetId }) => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const { emotionList } = useSelector((state) => state.emotion);
 	const [content, setContent] = useState('');
-
 	const [date, setDate] = useState(getStringDate(new Date()));
-
 	const [emotion, setEmotion] = useState(1);
+
+	//수정 시 원본 데이터
+	const [originData, setOriginData] = useState();
 
 	const dataId = useRef(0);
 	const { diaryPosts } = useSelector((state) => state.diary);
-	// useEffect(() => {
-	// 	dispatch(emotionSlice.actions.statusUpdate({ emotionGrade }));
-	// }, [emotionGrade]);
 
-	const [data] = diaryPosts.filter((v) => v.id === parseInt(editId));
-	const [editDate, setEditDate] = useState(
-		editId ? getStringDate(new Date(parseInt(data.date))) : null
-	);
-	const [editContent, setEditContent] = useState(editId ? data.content : null);
-	const [editEmotion, setEditEmotion] = useState(editId ? data.emotion : null);
-	// const strDate = getStringDate(new Date(parseInt(data.date)));
+	useEffect(() => {
+		if (isEdit) {
+			const targetData = diaryPosts.find((v) => v.id === parseInt(targetId));
+			setOriginData(targetData);
+			setContent(targetData.content);
+			setDate(getStringDate(new Date(targetData.date)));
+			setEmotion(targetData.emotion);
+		} else {
+			return;
+		}
+	}, []);
 
 	const handleEmotion = useCallback(
 		(grade) => () => {
 			setEmotion(grade);
-			setEditEmotion(grade);
 		},
 		[]
 	);
 
 	const handleContent = useCallback((e) => {
 		setContent(e.target.value);
-		setEditContent(e.target.value);
 	}, []);
 
 	const handleCreate = () => {
@@ -74,164 +73,92 @@ const DiaryForm = ({ editId }) => {
 	};
 
 	const handleEdit = () => {
-		if (editContent.length < 5) {
-			return alert('내용은 5자 이상 입력해주세요.');
-		}
 		dispatch(
 			edit({
-				id: data.id,
-				editEmotion,
-				editContent,
-				editDate: new Date(editDate).getTime(),
+				id: targetId,
+				emotion,
+				content,
+				date: new Date(date).getTime(),
 			})
 		);
-		navigate(`/diary/${editId}`, { replace: true });
+		navigate('/', { replace: true });
 	};
 
-	const handleRemove = () => {
-		if (window.confirm('삭제할까요?')) {
-			dispatch(remove({ id: data.id }));
-			navigate('/');
-		}
+	const handleDelete = () => {
+		dispatch(remove(targetId));
+		navigate('/', { replace: true });
 	};
 
-	if (editId) {
-		return (
-			<div>
-				<MyHeader
-					headText={'일기 수정하기'}
-					leftChild={<MyButton text={'돌아가기'} status={'default'} />}
-					onClickLeft={() => {
-						navigate(-1);
-					}}
-					rightChild={
+	return (
+		<div>
+			<MyHeader
+				headText={isEdit ? '수정하기' : '새로운 일기 쓰기'}
+				leftChild={<MyButton text={'돌아가기'} status={'default'} />}
+				onClickLeft={() => {
+					navigate(-1);
+				}}
+				rightChild={
+					isEdit ? (
 						<MyButton
 							text={'삭제하기'}
 							status={'negative'}
-							onClick={handleRemove}
+							onClick={handleDelete}
 						/>
-					}
-				/>
-				<DateWrapper>
-					<h5>날짜</h5>
-					<DateInput
-						type="date"
-						value={editDate}
-						onChange={(e) => {
-							setEditDate(e.target.value);
-						}}
-					/>
-				</DateWrapper>
-				<EmotionWrapper>
-					<h5>오늘의 감정</h5>
-					<EmotionDiv>
-						{emotionList.map((v) => {
-							return (
-								<EmotionList
-									key={v.grade}
-									{...v}
-									onClick={handleEmotion}
-									isSelected={v.grade === editEmotion}
-								/>
-							);
-						})}
-					</EmotionDiv>
-				</EmotionWrapper>
-				<ContentWrapper>
-					<h5>오늘의 일기</h5>
-					<div>
-						<DiaryTextArea
-							name="diaryData"
-							placeholder="오늘은 어땠어요?"
-							value={editContent}
-							onChange={handleContent}
-						></DiaryTextArea>
-					</div>
-				</ContentWrapper>
-				<ButtonDiv>
-					<MyButton
-						status={'default'}
-						onClick={() => {
-							navigate(-1);
-						}}
-						text={'취소하기'}
-					></MyButton>
-					<MyButton
-						status={'positive'}
-						onClick={handleEdit}
-						text={'수정하기'}
-					></MyButton>
-				</ButtonDiv>
-			</div>
-		);
-	} else {
-		return (
-			<div>
-				<MyHeader
-					headText={'새로운 일기 쓰기'}
-					leftChild={<MyButton text={'돌아가기'} status={'default'} />}
-					onClickLeft={() => {
-						navigate(-1);
+					) : null
+				}
+			/>
+			<DateWrapper>
+				<h5>날짜</h5>
+				<DateInput
+					type="date"
+					value={date}
+					onChange={(e) => {
+						setDate(e.target.value);
 					}}
 				/>
-				<DateWrapper>
-					<h5>날짜</h5>
-					<DateInput
-						type="date"
-						value={date}
-						onChange={(e) => {
-							setDate(e.target.value);
-						}}
-					/>
-				</DateWrapper>
-				<EmotionWrapper>
-					<h5>오늘의 감정</h5>
-					<EmotionDiv>
-						{emotionList.map((v) => {
-							return (
-								<EmotionList
-									key={v.grade}
-									{...v}
-									onClick={handleEmotion}
-									isSelected={v.grade === emotion}
-								/>
-							);
-						})}
-					</EmotionDiv>
-				</EmotionWrapper>
-				<ContentWrapper>
-					<h5>오늘의 일기</h5>
-					<div>
-						<DiaryTextArea
-							name="diaryData"
-							placeholder="오늘은 어땠어요?"
-							value={content}
-							onChange={handleContent}
-						></DiaryTextArea>
-					</div>
-				</ContentWrapper>
-				<ButtonDiv>
-					<MyButton
-						status={'default'}
-						onClick={() => {
-							navigate(-1);
-						}}
-						text={'취소하기'}
-					></MyButton>
-					<MyButton
-						status={'positive'}
-						onClick={handleCreate}
-						text={'등록하기'}
-					></MyButton>
-				</ButtonDiv>
-			</div>
-		);
-	}
+			</DateWrapper>
+			<EmotionWrapper>
+				<h5>오늘의 감정</h5>
+				<EmotionDiv>
+					{emotionList.map((v) => {
+						return (
+							<EmotionList
+								key={v.grade}
+								{...v}
+								onClick={handleEmotion}
+								isSelected={v.grade === emotion}
+							/>
+						);
+					})}
+				</EmotionDiv>
+			</EmotionWrapper>
+			<ContentWrapper>
+				<h5>오늘의 일기</h5>
+				<div>
+					<DiaryTextArea
+						name="diaryData"
+						placeholder="오늘은 어땠어요?"
+						value={content}
+						onChange={handleContent}
+					></DiaryTextArea>
+				</div>
+			</ContentWrapper>
+			<ButtonDiv>
+				<MyButton
+					status={'default'}
+					onClick={() => {
+						navigate(-1);
+					}}
+					text={'취소하기'}
+				></MyButton>
+				<MyButton
+					status={'positive'}
+					onClick={isEdit ? handleEdit : handleCreate}
+					text={isEdit ? '수정하기' : '등록하기'}
+				></MyButton>
+			</ButtonDiv>
+		</div>
+	);
 };
 
 export default DiaryForm;
-{
-	/* {emotion.map((v, i) => {
-						return <EmotionList key={v.grade} {...v} onClick={handleEmotion} />;
-					})} */
-}

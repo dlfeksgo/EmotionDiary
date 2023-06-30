@@ -7,7 +7,7 @@ const Edit = () => {
 
 	return (
 		<div>
-			<DiaryForm editId={id} />
+			<DiaryForm isEdit={true} targetId={id} />
 		</div>
 	);
 };

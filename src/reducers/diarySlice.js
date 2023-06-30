@@ -51,18 +51,16 @@ const diarySlice = createSlice({
 		},
 		edit: (state, action) => {
 			console.log(action.payload);
-
 			const data = state.diaryPosts.find(
 				(v) => v.id === parseInt(action.payload.id)
 			);
-			data.content = action.payload.editContent;
-			data.emotion = parseInt(action.payload.editEmotion);
-			data.date = action.payload.editDate;
+			data.content = action.payload.content;
+			data.emotion = parseInt(action.payload.emotion);
+			data.date = action.payload.date;
 		},
 		remove: (state, action) => {
-			// console.log(action.payload);
 			state.diaryPosts = state.diaryPosts.filter(
-				(v) => v.id !== parseInt(action.payload.id)
+				(v) => v.id !== parseInt(action.payload)
 			);
 		},
 	},
